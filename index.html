@@ -30,7 +30,7 @@
   <div ng-repeat="campaign in allCampaigns" ng-show="isSet(campaign.id)">
     <div class="row">
       <section class="col-md-6">
-        <div class="row" ng-repeat="rule in campaign.rules" style="padding-bottom: 10px">
+        <div class="row" ng-repeat="rule in campaign.rules" style="padding-bottom: 20px">
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">{{rule.name}}</div>
@@ -51,7 +51,7 @@
             </div>
           </div>
           <div class="col-md-8">
-            <button type="button" class="btn btn-default" style="outline: none;">Apply the rule</button>
+            <button type="button" class="btn btn-default" ng-click="applyChanges()" style="outline: none;">Apply the rule</button>
             <div class="btn-group" role="group" aria-label="Run/Stop">
               <button type="button" class="btn" ng-class="{ 'btn-primary': campaign.isRun, 'btn-default': !campaign.isRun }" style="outline: none;">Run</button>
               <button type="button" class="btn" ng-class="{ 'btn-primary': !campaign.isRun, 'btn-default': campaign.isRun }" style="outline: none;">Stop</button>

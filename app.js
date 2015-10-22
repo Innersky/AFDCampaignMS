@@ -127,7 +127,7 @@
         })
         .directive('ruleChart', function() {
             return {
-                template: '<canvas width="550" height="300"></canvas>',
+                template: '<canvas width="550" height="250"></canvas>',
                 restrict: 'E',
                 link: function (scope, element) {
                     var data = {
@@ -147,7 +147,7 @@
                         data.datasets[0].data.push(element.rate);
                     });
                     var ctx = element[0].firstChild.getContext("2d");
-                    var myNewChart = new Chart(ctx).Line(data, {
+                    var myChart = new Chart(ctx).Line(data, {
 
                         //Boolean - If we want to override with a hard coded scale
                         scaleOverride : true,
@@ -165,6 +165,13 @@
                         //Interpolated JS string - can access value
                         scaleLabel : "<%=value%>%",
                     });
+
+                    scope.applyChanges = function() {
+                        scope.campaign.rules.forEach(function(element, index) {
+                            myChart.datasets[0].points[index].value = element.rate;
+                            myChart.update();
+                        });
+                    };
                 }
             };
         })
