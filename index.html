@@ -30,19 +30,44 @@
   <div ng-repeat="campaign in allCampaigns" ng-show="isSet(campaign.id)">
     <div class="row">
       <section class="col-md-6">
-        <slider fraud-rate="A" default="100" class="row"></slider>
-        <slider fraud-rate="B" default="80" class="row"></slider>
-        <slider fraud-rate="C" default="60" class="row"></slider>
-        <slider fraud-rate="D" default="40" class="row"></slider>
+        <div class="row" ng-repeat="rule in campaign.rules" style="padding-bottom: 10px">
+          <div class="col-md-4">
+            <div class="input-group">
+              <div class="input-group-addon">{{rule.name}}</div>
+              <input type="text" class="form-control" ng-model="rule.rate">
+              <div class="input-group-addon">%</div>
+            </div>
+          </div>
+          <div class="col-md-8" style="padding-top: 8px">
+            <slider ng-model="rule.rate"></slider>
+          </div>
+        </div>
+        <div class="row">
+          <div class="col-md-4">
+            <div class="input-group">
+              <div class="input-group-addon">Base</div>
+              <input type="text" class="form-control" value="{{campaign.base}}">
+              <div class="input-group-addon">$</div>
+            </div>
+          </div>
+          <div class="col-md-8">
+            <button type="button" class="btn btn-default" style="outline: none;">Apply the rule</button>
+            <div class="btn-group" role="group" aria-label="Run/Stop">
+              <button type="button" class="btn" ng-class="{ 'btn-primary': campaign.isRun, 'btn-default': !campaign.isRun }" style="outline: none;">Run</button>
+              <button type="button" class="btn" ng-class="{ 'btn-primary': !campaign.isRun, 'btn-default': campaign.isRun }" style="outline: none;">Stop</button>
+            </div>
+          </div>
+        </div>
       </section>
-      <section class="col-md-6" style="background: red">
-        test
+      <section class="col-md-6">
+        <rule-chart></rule-chart>
       </section>
     </div>
   </div>
 </div>
 
 <script src="components/nouislider.min.js"></script>
+<script src="components/Chart.min.js"></script>
 <script src="components/angular.min.js"></script>
 <script src="app.js"></script>
 </body>
