@@ -1,0 +1,49 @@
+<!DOCTYPE html>
+<html ng-app="campaignMS">
+<head>
+  <meta charset="utf-8">
+  <meta http-equiv="X-UA-Compatible" content="IE=edge">
+  <title>My AngularJS App</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <link rel="stylesheet" href="components/bootstrap-3.3.5-dist/css/bootstrap.min.css">
+  <link href="components/nouislider.min.css" rel="stylesheet">
+  <link rel="stylesheet" href="app.css">
+  <style>
+  </style>
+</head>
+<body>
+<header class="container header" ng-controller="headerController">
+  <section class="logo">
+    <img src="components/bmw-logo.jpg" alt="BMW logo" />
+    <h1>BMW Campaign Management System</h1>
+  </section>
+
+  <section>
+    <ul class="nav nav-pills nav-nobg">
+      <li ng-repeat="campaign in allCampaigns">
+        <a href ng-class="{ active: isSet(campaign.id) }" ng-click="setTab(campaign.id)">{{campaign.title}}</a>
+      </li>
+    </ul>
+  </section>
+</header>
+<div class="container" ng-controller="campaignController" style="padding-top: 30px">
+  <div ng-repeat="campaign in allCampaigns" ng-show="isSet(campaign.id)">
+    <div class="row">
+      <section class="col-md-6">
+        <slider fraud-rate="A" default="100" class="row"></slider>
+        <slider fraud-rate="B" default="80" class="row"></slider>
+        <slider fraud-rate="C" default="60" class="row"></slider>
+        <slider fraud-rate="D" default="40" class="row"></slider>
+      </section>
+      <section class="col-md-6" style="background: red">
+
+      </section>
+    </div>
+  </div>
+</div>
+
+<script src="components/nouislider.min.js"></script>
+<script src="components/angular.min.js"></script>
+<script src="app.js"></script>
+</body>
+</html>
