@@ -1,7 +1,8 @@
 .header {
-  border-bottom: 1px solid #aaa;
   padding-top: 20px;
   padding-bottom: 8px;
+  border-radius: 0 0 5px 5px;
+  background: #F2F9FB;
 }
 
 .header .logo {
@@ -22,7 +23,7 @@
 .nav-nobg>li>a {
   background: none;
   border-radius: 0;
-  border-left: 3px solid #fff;
+  border-left: 3px solid #F2F9FB;
 }
 
 .nav-nobg>li>a.active {
@@ -43,16 +44,18 @@
   border-left: 3px solid #0081BB;
 }
 
-.valign-middle {
-  display: table;
+.bg-title {
+  background-color: #C9E7ED;
+  border-radius: 5px 5px 0 0;
 }
 
-.valign-middle .columns {
-  display: table-cell;
-  vertical-align: middle;
+.bg-body {
+  background-color: #F2F9FB;
+  border-radius: 0 0 5px 5px;
+  border-top: none;
+  padding: 7px;
 }
 
-.valign-middle .columns,
-.valign-middle [class*="column"] + [class*="column"]:last-child {
-  float: none;
+div.interval {
+  height: 30px;
 }

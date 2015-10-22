@@ -11,7 +11,7 @@
   <style>
   </style>
 </head>
-<body>
+<body style="background-image: url('components/bg-texture.png');">
 <header class="container header" ng-controller="headerController">
   <section class="logo">
     <img src="components/bmw-logo.jpg" alt="BMW logo" />
@@ -26,11 +26,15 @@
     </ul>
   </section>
 </header>
-<div class="container" ng-controller="campaignController" style="padding-top: 30px">
-  <div ng-repeat="campaign in allCampaigns" ng-show="isSet(campaign.id)">
-    <div class="row">
+<div class="container" ng-controller="campaignController">
+  <div ng-repeat="campaign in allCampaigns" ng-controller="subCampaignController" ng-show="isSet(campaign.id)">
+    <h2 style="color: #eaf2d9">Campaign Name: {{campaign.title}}</h2>
+    <div class="row bg-title">
+      <h4 class="col-md-12">Rule Setting</h4>
+    </div>
+    <div class="row bg-body">
       <section class="col-md-6">
-        <div class="row" ng-repeat="rule in campaign.rules" style="padding-bottom: 20px">
+        <div class="row" ng-repeat="rule in campaign.rules" style="padding: 10px 0px">
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">{{rule.name}}</div>
@@ -42,7 +46,7 @@
             <slider ng-model="rule.rate"></slider>
           </div>
         </div>
-        <div class="row">
+        <div class="row" style="padding: 10px 0px">
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">Base</div>
@@ -53,8 +57,8 @@
           <div class="col-md-8">
             <button type="button" class="btn btn-default" ng-click="applyChanges()" style="outline: none;">Apply the rule</button>
             <div class="btn-group" role="group" aria-label="Run/Stop">
-              <button type="button" class="btn" ng-class="{ 'btn-primary': campaign.isRun, 'btn-default': !campaign.isRun }" style="outline: none;">Run</button>
-              <button type="button" class="btn" ng-class="{ 'btn-primary': !campaign.isRun, 'btn-default': campaign.isRun }" style="outline: none;">Stop</button>
+              <button type="button" class="btn" ng-class="{ 'btn-primary': campaign.isRun, 'btn-default': !campaign.isRun }" ng-click="run()" style="outline: none;">Run</button>
+              <button type="button" class="btn" ng-class="{ 'btn-primary': !campaign.isRun, 'btn-default': campaign.isRun }" ng-click="stop()" style="outline: none;">Stop</button>
             </div>
           </div>
         </div>
@@ -62,6 +66,28 @@
       <section class="col-md-6">
         <rule-chart></rule-chart>
       </section>
+    </div>
+    <div class="interval"></div>
+    <div class="row bg-title">
+      <h4 class="col-md-12">Data Panel</h4>
+    </div>
+    <div class="row bg-body">
+      <table class="table table-hover">
+        <thead>
+          <th>
+            Start Time
+          </th>
+          <th>
+            Duration(s)
+          </th>
+          <th ng-repeat="rule in campaign.rules">
+            {{rule.name}} Clicks*Rate
+          </th>
+          <th>
+            Balance
+          </th>
+        </thead>
+      </table>
     </div>
   </div>
 </div>

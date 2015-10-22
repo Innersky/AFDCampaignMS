@@ -25,12 +25,12 @@
                     ],
                     base: 20,
                     isRun: false,
+                    balance: 5000000,
                     current: {
                         AClicks: 0,
                         BClicks: 0,
                         CClicks: 0,
-                        DClicks: 0,
-                        Balance: 5000000
+                        DClicks: 0
                     },
                     history: []
                 },
@@ -57,12 +57,12 @@
                     ],
                     base: 40,
                     isRun: false,
+                    balance: 8000000,
                     current: {
                         AClicks: 0,
                         BClicks: 0,
                         CClicks: 0,
-                        DClicks: 0,
-                        Balance: 8000000
+                        DClicks: 0
                     },
                     history: []
                 },
@@ -89,12 +89,12 @@
                     ],
                     base: 70,
                     isRun: false,
+                    balance: 10000000,
                     current: {
                         AClicks: 0,
                         BClicks: 0,
                         CClicks: 0,
-                        DClicks: 0,
-                        Balance: 10000000
+                        DClicks: 0
                     },
                     history: []
                 }
@@ -125,9 +125,27 @@
                 return campaignsService.getCurrentID() === id;
             };
         })
+        .controller('subCampaignController', function($scope){
+            $scope.ruleChart = null;
+
+            $scope.applyChanges = function() {
+                $scope.campaign.rules.forEach(function(element, index) {
+                    $scope.ruleChart.datasets[0].points[index].value = element.rate;
+                    $scope.ruleChart.update();
+                });
+            };
+
+            $scope.run = function() {
+                $scope.campaign.isRun = true;
+            };
+
+            $scope.stop = function() {
+                $scope.campaign.isRun = false;
+            };
+        })
         .directive('ruleChart', function() {
             return {
-                template: '<canvas width="550" height="250"></canvas>',
+                template: '<canvas width="550" height="270"></canvas>',
                 restrict: 'E',
                 link: function (scope, element) {
                     var data = {
@@ -166,12 +184,7 @@
                         scaleLabel : "<%=value%>%",
                     });
 
-                    scope.applyChanges = function() {
-                        scope.campaign.rules.forEach(function(element, index) {
-                            myChart.datasets[0].points[index].value = element.rate;
-                            myChart.update();
-                        });
-                    };
+                    scope.ruleChart = myChart;
                 }
             };
         })
