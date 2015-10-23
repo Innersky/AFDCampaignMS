@@ -1,6 +1,7 @@
 (function(){
     angular.module('campaignMS', [])
-        .service('campaignsService', function(){
+        //Angular service for fetching data and post data
+        .service('campaignsService', function($interval){
             campaigns = [
                 {
                     id: 1,
@@ -25,14 +26,16 @@
                     ],
                     base: 20,
                     isRun: false,
+                    startTime: null,
+                    duration: 0,
                     balance: 5000000,
-                    current: {
-                        AClicks: 0,
-                        BClicks: 0,
-                        CClicks: 0,
-                        DClicks: 0
+                    currentClicks: {
+                        'Class A': 0,
+                        'Class B': 0,
+                        'Class C': 0,
+                        'Class D': 0
                     },
-                    history: []
+                    histories: []
                 },
                 {
                     id: 2,
@@ -57,14 +60,16 @@
                     ],
                     base: 40,
                     isRun: false,
+                    startTime: null,
+                    duration: 0,
                     balance: 8000000,
-                    current: {
-                        AClicks: 0,
-                        BClicks: 0,
-                        CClicks: 0,
-                        DClicks: 0
+                    currentClicks: {
+                        'Class A': 0,
+                        'Class B': 0,
+                        'Class C': 0,
+                        'Class D': 0
                     },
-                    history: []
+                    histories: []
                 },
                 {
                     id: 3,
@@ -89,17 +94,19 @@
                     ],
                     base: 70,
                     isRun: false,
+                    startTime: null,
+                    duration: 0,
                     balance: 10000000,
-                    current: {
-                        AClicks: 0,
-                        BClicks: 0,
-                        CClicks: 0,
-                        DClicks: 0
+                    currentClicks: {
+                        'Class A': 0,
+                        'Class B': 0,
+                        'Class C': 0,
+                        'Class D': 0
                     },
-                    history: []
+                    histories: []
                 }
             ];
-            currentID = 1;
+            var currentID = 1;
             this.getCurrentID = function() {
                 return currentID;
             };
@@ -109,7 +116,35 @@
             this.getAll = function() {
                 return campaigns;
             };
+
+            this.runCampaign = function(campaignID) {
+                return true;
+            };
+
+            this.stopCampaign = function(campaignID) {
+                return true;
+            };
+            var clicks;
+            clicks = $interval(function() {
+                campaigns.forEach(function(element) {
+                    if(element.isRun) {
+                        var newClicks = {
+                            'Class A': getRandomInt(20, 300),
+                            'Class B': getRandomInt(100, 700),
+                            'Class C': getRandomInt(500, 1000),
+                            'Class D': getRandomInt(40, 200)
+                        };
+                        var now = new Date().getTime();
+                        element.duration = Math.ceil((now - element.startTime) / 1000);
+                        element.rules.forEach(function(e) {
+                            element.balance -= newClicks[e.name] * e.rate * element.base / 100;
+                            element.currentClicks[e.name] += newClicks[e.name];
+                        });
+                    }
+                });
+            }, 1000);
         })
+        //controller for header and nav bar
         .controller('headerController', function($scope, campaignsService){
             $scope.isSet = function(id) {
                 return campaignsService.getCurrentID() === id;
@@ -119,30 +154,83 @@
             };
             $scope.allCampaigns = campaignsService.getAll();
         })
+        //campaign controller for all campaigns
         .controller('campaignController', function($scope, campaignsService){
             $scope.allCampaigns = campaignsService.getAll();
             $scope.isSet = function(id) {
                 return campaignsService.getCurrentID() === id;
             };
         })
-        .controller('subCampaignController', function($scope){
+        //the controller for single campaign
+        .controller('subCampaignController', function($scope, campaignsService){
             $scope.ruleChart = null;
+            $scope.tempRules = [];
+            $scope.campaign.rules.forEach(function(element) {
+                var name = element.name;
+                var rate = element.rate;
+                var rule = {
+                    'name': name,
+                    'rate': rate
+                };
+                $scope.tempRules.push(rule);
+            });
 
             $scope.applyChanges = function() {
-                $scope.campaign.rules.forEach(function(element, index) {
+                $scope.campaign.rules = [];
+                $scope.tempRules.forEach(function(element) {
+                    var name = element.name;
+                    var rate = element.rate;
+                    var rule = {
+                        'name': name,
+                        'rate': rate
+                    };
+                    $scope.campaign.rules.push(rule);
+                });
+                $scope.tempRules.forEach(function(element, index) {
                     $scope.ruleChart.datasets[0].points[index].value = element.rate;
                     $scope.ruleChart.update();
                 });
+                $scope.stop();
             };
 
             $scope.run = function() {
-                $scope.campaign.isRun = true;
+                if(!$scope.campaign.isRun && campaignsService.runCampaign($scope.campaign.id)) {
+                    $scope.campaign.isRun = true;
+                    $scope.campaign.startTime = new Date().getTime();
+                    $scope.campaign.duration = 0;
+                }
             };
 
             $scope.stop = function() {
-                $scope.campaign.isRun = false;
+                if($scope.campaign.isRun && campaignsService.stopCampaign($scope.campaign.id)) {
+                    $scope.campaign.isRun = false;
+                    var currentSeconds = new Date().getTime() / 1000;
+                    var tempRules = [];
+                    var tempClicks = {};
+                    $scope.campaign.rules.forEach(function(element) {
+                        var name = element.name;
+                        var rate = element.rate;
+                        var rule = {
+                            'name': name,
+                            'rate': rate
+                        };
+                        var click = $scope.campaign.currentClicks[name];
+                        tempRules.push(rule);
+                        tempClicks[name] = click;
+                    });
+                    var newHistory = {
+                        startTime: $scope.campaign.startTime,
+                        duration: $scope.campaign.duration,
+                        rules: tempRules,
+                        clicks: tempClicks,
+                        base: $scope.campaign.base,
+                        balance: $scope.campaign.balance
+                    };
+                    $scope.campaign.histories.push(newHistory);
+                }
             };
         })
+        //directive to handle chart
         .directive('ruleChart', function() {
             return {
                 template: '<canvas width="550" height="270"></canvas>',
@@ -160,7 +248,7 @@
                             }
                         ]
                     }
-                    scope.campaign.rules.forEach(function(element) {
+                    scope.tempRules.forEach(function(element) {
                         data.labels.push(element.name);
                         data.datasets[0].data.push(element.rate);
                     });
@@ -188,6 +276,7 @@
                 }
             };
         })
+        //directive for slider range select
         .directive('slider', function() {
             return {
                 template: '<div style="background: #0081BB"></div>',
@@ -207,10 +296,17 @@
                     });
 
                     rangeSlider.noUiSlider.on('update', function( values, handle ) {
+                        //console.log(scope.campaign);
                         ctrl.$setViewValue(Math.ceil(values[handle]));
                         ctrl.$render();
                     });
                 }
             }
         });
+
+    // Returns a random integer between min (included) and max (excluded)
+    // Using Math.round() will give you a non-uniform distribution!
+    function getRandomInt(min, max) {
+        return Math.floor(Math.random() * (max - min)) + min;
+    }
 })();

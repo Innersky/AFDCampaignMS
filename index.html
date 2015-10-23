@@ -29,12 +29,13 @@
 <div class="container" ng-controller="campaignController">
   <div ng-repeat="campaign in allCampaigns" ng-controller="subCampaignController" ng-show="isSet(campaign.id)">
     <h2 style="color: #eaf2d9">Campaign Name: {{campaign.title}}</h2>
+    <!--Below is rule setting panel including chart-->
     <div class="row bg-title">
       <h4 class="col-md-12">Rule Setting</h4>
     </div>
     <div class="row bg-body">
       <section class="col-md-6">
-        <div class="row" ng-repeat="rule in campaign.rules" style="padding: 10px 0px">
+        <div class="row" ng-repeat="rule in tempRules" style="padding: 10px 0px">
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">{{rule.name}}</div>
@@ -67,7 +68,9 @@
         <rule-chart></rule-chart>
       </section>
     </div>
+    <!--Above is rule setting panel including chart-->
     <div class="interval"></div>
+    <!--Below is Data Panel-->
     <div class="row bg-title">
       <h4 class="col-md-12">Data Panel</h4>
     </div>
@@ -81,14 +84,43 @@
             Duration(s)
           </th>
           <th ng-repeat="rule in campaign.rules">
-            {{rule.name}} Clicks*Rate
+            {{rule.name}} <i>(Clicks*Rate)</i>
           </th>
           <th>
             Balance
           </th>
         </thead>
+        <tr ng-show="campaign.isRun">
+          <td>
+            {{campaign.startTime | date}}
+          </td>
+          <td>
+            {{campaign.duration}}
+          </td>
+          <td ng-repeat="rule in campaign.rules">
+            {{campaign.currentClicks[rule.name]}}*{{rule.rate * campaign.base / 100}}
+          </td>
+          <td>
+            {{campaign.balance}}
+          </td>
+        </tr>
+        <tr ng-repeat="history in campaign.histories | orderBy:'$index':true">
+          <td>
+            {{history.startTime | date}}
+          </td>
+          <td>
+            {{history.duration}}
+          </td>
+          <td ng-repeat="rule in history.rules">
+            {{history.clicks[rule.name]}}*{{rule.rate * history.base / 100}}
+          </td>
+          <td>
+            {{history.balance}}
+          </td>
+        </tr>
       </table>
     </div>
+    <!--Above is Data Panel-->
   </div>
 </div>
 
