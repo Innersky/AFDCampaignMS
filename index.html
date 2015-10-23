@@ -31,7 +31,7 @@
     <h2 style="color: #eaf2d9">Campaign Name: {{campaign.title}}</h2>
     <!--Below is rule setting panel including chart-->
     <div class="row bg-title">
-      <h4 class="col-md-12">Rule Setting</h4>
+      <h4 class="col-md-12">Rule Setting <i ng-show="isChange">(Haven't applied)</i></h4>
     </div>
     <div class="row bg-body">
       <section class="col-md-6">
@@ -39,7 +39,7 @@
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">{{rule.name}}</div>
-              <input type="text" class="form-control" ng-model="rule.rate">
+              <input type="text" class="form-control" listen-change ng-model="rule.rate" ng-change="syncSlider(rule.rate)">
               <div class="input-group-addon">%</div>
             </div>
           </div>
@@ -51,7 +51,7 @@
           <div class="col-md-4">
             <div class="input-group">
               <div class="input-group-addon">Base</div>
-              <input type="text" class="form-control" value="{{campaign.base}}">
+              <input type="text" class="form-control" listen-change ng-model="tempBase">
               <div class="input-group-addon">$</div>
             </div>
           </div>

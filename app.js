@@ -2,6 +2,7 @@
     angular.module('campaignMS', [])
         //Angular service for fetching data and post data
         .service('campaignsService', function($interval){
+            //Data below is hard coded
             campaigns = [
                 {
                     id: 1,
@@ -9,7 +10,7 @@
                     rules: [
                         {
                             name: 'Class A',
-                            rate: 100
+                            rate: 90
                         },
                         {
                             name: 'Class B',
@@ -17,7 +18,7 @@
                         },
                         {
                             name: 'Class C',
-                            rate: 60
+                            rate: 50
                         },
                         {
                             name: 'Class D',
@@ -81,6 +82,40 @@
                         },
                         {
                             name: 'Class B',
+                            rate: 60
+                        },
+                        {
+                            name: 'Class C',
+                            rate: 30
+                        },
+                        {
+                            name: 'Class D',
+                            rate: 10
+                        }
+                    ],
+                    base: 70,
+                    isRun: false,
+                    startTime: null,
+                    duration: 0,
+                    balance: 10000000,
+                    currentClicks: {
+                        'Class A': 0,
+                        'Class B': 0,
+                        'Class C': 0,
+                        'Class D': 0
+                    },
+                    histories: []
+                },
+                {
+                    id: 4,
+                    title: 'BMW M Series',
+                    rules: [
+                        {
+                            name: 'Class A',
+                            rate: 90
+                        },
+                        {
+                            name: 'Class B',
                             rate: 80
                         },
                         {
@@ -89,14 +124,14 @@
                         },
                         {
                             name: 'Class D',
-                            rate: 40
+                            rate: 50
                         }
                     ],
-                    base: 70,
+                    base: 100,
                     isRun: false,
                     startTime: null,
                     duration: 0,
-                    balance: 10000000,
+                    balance: 600000,
                     currentClicks: {
                         'Class A': 0,
                         'Class B': 0,
@@ -165,6 +200,14 @@
         .controller('subCampaignController', function($scope, campaignsService){
             $scope.ruleChart = null;
             $scope.tempRules = [];
+            $scope.isChange = false;
+            $scope.changeDetected = function() {
+                $scope.isChange = true;
+            };
+            $scope.changeApplied = function() {
+                $scope.isChange = false;
+            };
+            $scope.tempBase = $scope.campaign.base;
             $scope.campaign.rules.forEach(function(element) {
                 var name = element.name;
                 var rate = element.rate;
@@ -176,6 +219,7 @@
             });
 
             $scope.applyChanges = function() {
+                $scope.stop();
                 $scope.campaign.rules = [];
                 $scope.tempRules.forEach(function(element) {
                     var name = element.name;
@@ -190,7 +234,8 @@
                     $scope.ruleChart.datasets[0].points[index].value = element.rate;
                     $scope.ruleChart.update();
                 });
-                $scope.stop();
+                $scope.campaign.base = $scope.tempBase;
+                $scope.changeApplied();
             };
 
             $scope.run = function() {
@@ -204,7 +249,6 @@
             $scope.stop = function() {
                 if($scope.campaign.isRun && campaignsService.stopCampaign($scope.campaign.id)) {
                     $scope.campaign.isRun = false;
-                    var currentSeconds = new Date().getTime() / 1000;
                     var tempRules = [];
                     var tempClicks = {};
                     $scope.campaign.rules.forEach(function(element) {
@@ -287,7 +331,7 @@
 
                     noUiSlider.create(rangeSlider, {
                         start: scope.rule.rate,
-                        step: 10,
+                        step: 1,
                         connect: 'lower',
                         range: {
                             'min': [ 0 ],
@@ -295,13 +339,32 @@
                         }
                     });
 
+                    scope.syncSlider = function(value) {
+                        rangeSlider.noUiSlider.set(value);
+                    };
+
                     rangeSlider.noUiSlider.on('update', function( values, handle ) {
-                        //console.log(scope.campaign);
                         ctrl.$setViewValue(Math.ceil(values[handle]));
                         ctrl.$render();
                     });
                 }
             }
+        })
+        //if a ng-model value need to be listened, simply add attribute 'listen-change' to the directive.
+        //if the value is changed, it will run changeDetected() function within the scope.
+        .directive('listenChange', function() {
+            return {
+                restrict: 'A',
+                link: function(scope, element, attrs) {
+
+                    scope.$watch(attrs['ngModel'], function (newValue, oldValue) {
+                        if(newValue === oldValue){
+                            return;
+                        }
+                        scope.changeDetected();
+                    });
+                }
+            };
         });
 
     // Returns a random integer between min (included) and max (excluded)
