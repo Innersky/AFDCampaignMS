@@ -8,11 +8,9 @@
   <link rel="stylesheet" href="components/bootstrap-3.3.5-dist/css/bootstrap.min.css">
   <link href="components/nouislider.min.css" rel="stylesheet">
   <link rel="stylesheet" href="app.css">
-  <style>
-  </style>
 </head>
-<body style="background-image: url('components/bg-texture.png');">
-<header class="container header" ng-controller="headerController">
+<body style="background-image: url('components/bg-texture.png');" ng-controller="campaignController">
+<header class="container header">
   <section class="logo">
     <img src="components/bmw-logo.jpg" alt="BMW logo" />
     <h1>BMW Campaign Management System</h1>
@@ -26,7 +24,7 @@
     </ul>
   </section>
 </header>
-<div class="container" ng-controller="campaignController">
+<div class="container">
   <div ng-repeat="campaign in allCampaigns" ng-controller="subCampaignController" ng-show="isSet(campaign.id)">
     <h2 style="color: #eaf2d9">Campaign Name: {{campaign.title}}</h2>
     <!--Below is rule setting panel including chart-->

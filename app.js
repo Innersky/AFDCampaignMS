@@ -141,13 +141,6 @@
                     histories: []
                 }
             ];
-            var currentID = 1;
-            this.getCurrentID = function() {
-                return currentID;
-            };
-            this.setCurrentID = function(id) {
-                currentID = id;
-            };
             this.getAll = function() {
                 return campaigns;
             };
@@ -179,21 +172,15 @@
                 });
             }, 1000);
         })
-        //controller for header and nav bar
-        .controller('headerController', function($scope, campaignsService){
-            $scope.isSet = function(id) {
-                return campaignsService.getCurrentID() === id;
-            };
-            $scope.setTab = function(id) {
-                campaignsService.setCurrentID(id);
-            };
-            $scope.allCampaigns = campaignsService.getAll();
-        })
         //campaign controller for all campaigns
         .controller('campaignController', function($scope, campaignsService){
+            $scope.currentID = 1;
             $scope.allCampaigns = campaignsService.getAll();
             $scope.isSet = function(id) {
-                return campaignsService.getCurrentID() === id;
+                return $scope.currentID === id;
+            };
+            $scope.setTab = function(id) {
+                $scope.currentID = id;
             };
         })
         //the controller for single campaign
