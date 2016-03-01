@@ -1,0 +1,138 @@
+[
+  {
+    "id": 1,
+    "title": "BMW 33 Series",
+    "rules": [
+      {
+        "name": "Class A",
+        "rate": 90
+      },
+      {
+        "name": "Class B",
+        "rate": 80
+      },
+      {
+        "name": "Class C",
+        "rate": 50
+      },
+      {
+        "name": "Class D",
+        "rate": 40
+      }
+    ],
+    "base": 20,
+    "isRun": false,
+    "startTime": null,
+    "duration": 0,
+    "balance": 5000000,
+    "currentClicks": {
+      "Class A": 0,
+      "Class B": 0,
+      "Class C": 0,
+      "Class D": 0
+    },
+    "histories": []
+  },
+  {
+    "id": 2,
+    "title": "BMW 5 Series",
+    "rules": [
+      {
+        "name": "Class A",
+        "rate": 100
+      },
+      {
+        "name": "Class B",
+        "rate": 80
+      },
+      {
+        "name": "Class C",
+        "rate": 60
+      },
+      {
+        "name": "Class D",
+        "rate": 40
+      }
+    ],
+    "base": 40,
+    "isRun": false,
+    "startTime": null,
+    "duration": 0,
+    "balance": 8000000,
+    "currentClicks": {
+      "Class A": 0,
+      "Class B": 0,
+      "Class C": 0,
+      "Class D": 0
+    },
+    "histories": []
+  },
+  {
+    "id": 3,
+    "title": "BMW 7 Series",
+    "rules": [
+      {
+        "name": "Class A",
+        "rate": 100
+      },
+      {
+        "name": "Class B",
+        "rate": 60
+      },
+      {
+        "name": "Class C",
+        "rate": 30
+      },
+      {
+        "name": "Class D",
+        "rate": 10
+      }
+    ],
+    "base": 70,
+    "isRun": false,
+    "startTime": null,
+    "duration": 0,
+    "balance": 10000000,
+    "currentClicks": {
+      "Class A": 0,
+      "Class B": 0,
+      "Class C": 0,
+      "Class D": 0
+    },
+    "histories": []
+  },
+  {
+    "id": 4,
+    "title": "BMW X Series",
+    "rules": [
+      {
+        "name": "Class A",
+        "rate": 90
+      },
+      {
+        "name": "Class B",
+        "rate": 80
+      },
+      {
+        "name": "Class C",
+        "rate": 60
+      },
+      {
+        "name": "Class D",
+        "rate": 50
+      }
+    ],
+    "base": 100,
+    "isRun": false,
+    "startTime": null,
+    "duration": 0,
+    "balance": 600000,
+    "currentClicks": {
+      "Class A": 0,
+      "Class B": 0,
+      "Class C": 0,
+      "Class D": 0
+    },
+    "histories": []
+  }
+]
