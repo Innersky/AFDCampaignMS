@@ -108,7 +108,7 @@
                 },
                 {
                     id: 4,
-                    title: 'BMW M Series',
+                    title: 'BMW X Series',
                     rules: [
                         {
                             name: 'Class A',
