@@ -99,7 +99,7 @@
             {{campaign.currentClicks[rule.name]}}*{{rule.rate * campaign.base / 100}}
           </td>
           <td>
-            {{campaign.balance}}
+            {{campaign.balance | number:0}}
           </td>
         </tr>
         <tr ng-repeat="history in campaign.histories | orderBy:'$index':true">
@@ -113,7 +113,7 @@
             {{history.clicks[rule.name]}}*{{rule.rate * history.base / 100}}
           </td>
           <td>
-            {{history.balance}}
+            {{history.balance | number:0}}
           </td>
         </tr>
       </table>
