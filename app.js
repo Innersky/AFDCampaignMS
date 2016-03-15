@@ -4,10 +4,7 @@
         .service('campaignsService', function($interval,$http){
             //Data below is hard coded
             var campaigns = [];
-            $http.get('./campaigns.json').success(function(data) {
-                campaigns = data;
-                console.log(campaigns);
-            });
+
             this.getAll = function() {
                 return campaigns;
             };
@@ -38,6 +35,11 @@
                     }
                 });
             }, 1000);
+            $http.get('./campaigns.json').success(function(data) {
+                data.forEach(function(e) {
+                    campaigns.push(e);
+                })
+            });
         })
         //campaign controller for all campaigns
         .controller('campaignController', function($scope, campaignsService){
